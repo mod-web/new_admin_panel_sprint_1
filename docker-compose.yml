@@ -1,0 +1,12 @@
+version: "3.11"
+
+services:
+  postgres:
+    container_name: postgres
+    restart: always
+    image: postgres:15
+    volumes:
+      - $HOME/postgresql/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file: .env
