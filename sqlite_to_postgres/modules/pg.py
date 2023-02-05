@@ -9,11 +9,11 @@ class PostgresSaver:
     def save_data(self, data: list, table: str, batch_size: int = 25):
         if table == 'film_work':
             with self.pg_conn.cursor() as cursor:
-                cmd = 'INSERT INTO content.film_work (id, title, created, modified, description, creation_date, rating, type) \
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT (id) DO NOTHING; '
-                imp = [
-                    (d.id, d.title, d.created_at, datetime.now(), d.description, d.creation_date, d.rating, d.type)
-                    for d in data]
+                cmd = 'INSERT INTO content.film_work ' \
+                      '(id, title, created, modified, description, creation_date, rating, type) \
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT (id) DO NOTHING; '
+                imp = [(d.id, d.title, d.created_at, datetime.now(), d.description,
+                        d.creation_date, d.rating, d.type) for d in data]
                 execute_batch(cursor, cmd, imp, page_size=batch_size)
                 self.pg_conn.commit()
 
@@ -37,7 +37,8 @@ class PostgresSaver:
             with self.pg_conn.cursor() as cursor:
                 cmd = 'INSERT INTO content.genre_film_work (id, genre_id, film_work_id, created) \
                        VALUES (%s, %s, %s, %s) ON CONFLICT (id) DO NOTHING; '
-                imp = [(d.id, d.genre_id, d.film_work_id, datetime.now()) for d in data]
+                imp = [(d.id, d.genre_id, d.film_work_id, datetime.now())
+                       for d in data]
                 execute_batch(cursor, cmd, imp, page_size=batch_size)
                 self.pg_conn.commit()
 

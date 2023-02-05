@@ -6,7 +6,10 @@ import psycopg2
 import sqlite3
 from modules.sql import SqlExtractor
 from modules.pg import PostgresSaver
-from modules.dataclasses import Movie, Person, Genre, PersonFilmwork, GenreFilmwork
+from modules.dataclasses import (
+    Movie, Person, Genre,
+    PersonFilmwork, GenreFilmwork,
+)
 from dotenv import load_dotenv
 
 
@@ -23,13 +26,12 @@ dsl = {'dbname': os.environ.get('DB_NAME'),
 
 
 # Dataclasses - Table
-tables = [
-        (Movie, 'film_work'),
-        (Genre, 'genre'),
-        (Person, 'person'),
-        (GenreFilmwork, 'genre_film_work'),
-        (PersonFilmwork, 'person_film_work'),
-    ]
+tables = [(Movie, 'film_work'),
+          (Genre, 'genre'),
+          (Person, 'person'),
+          (GenreFilmwork, 'genre_film_work'),
+          (PersonFilmwork, 'person_film_work')]
+
 
 @contextmanager
 def conn_context(db_path: str):
@@ -40,6 +42,7 @@ def conn_context(db_path: str):
         yield conn
     finally:
         conn.close()
+
 
 @contextmanager
 def pg_conn_context(dsl: dict):
