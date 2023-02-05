@@ -21,8 +21,7 @@ dsl = {'dbname': os.environ.get('DB_NAME'),
        'user': os.environ.get('DB_USER'),
        'password': os.environ.get('DB_PASSWORD'),
        'host': os.environ.get('DB_HOST'),
-       'port': os.environ.get('DB_PORT'),
-       }
+       'port': os.environ.get('DB_PORT'),}
 
 
 # Dataclasses - Table
@@ -70,4 +69,6 @@ if __name__ == '__main__':
     with conn_context(sqlite) as sqlite_conn, pg_conn_context(dsl) as pg_conn:
         """Запуск основной функции переноса данных"""
         load_from_sqlite(sqlite_conn, pg_conn)
+        sqlite_conn.close()
+        pg_conn.close()
 
