@@ -70,3 +70,4 @@ if __name__ == '__main__':
     with conn_context(sqlite) as sqlite_conn, pg_conn_context(dsl) as pg_conn:
         """Запуск основной функции переноса данных"""
         load_from_sqlite(sqlite_conn, pg_conn)
+
