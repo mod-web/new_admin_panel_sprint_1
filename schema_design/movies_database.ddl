@@ -41,3 +41,10 @@ CREATE TABLE IF NOT EXISTS content.person_film_work (
     role TEXT NOT NULL,
     created timestamp with time zone
 );
+
+CREATE TABLE IF NOT EXISTS content.genre_film_work (
+    id uuid PRIMARY KEY,
+    film_work_id uuid NOT NULL,
+    genre_id uuid NOT NULL,
+    created timestamp with time zone
+);
