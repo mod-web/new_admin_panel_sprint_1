@@ -40,7 +40,6 @@ def conn_context(db_path: str):
     finally:
         conn.close()
 
-
 @contextmanager
 def pg_conn_context(dsl: dict):
     """Добавление в общий контекст подключения к postgres"""
