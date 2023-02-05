@@ -16,6 +16,7 @@ class PostgresSaver:
                         d.creation_date, d.rating, d.type) for d in data]
                 execute_batch(cursor, cmd, imp, page_size=batch_size)
                 self.pg_conn.commit()
+                self.pg_conn.close()
 
         if table == 'person':
             with self.pg_conn.cursor() as cursor:
@@ -24,6 +25,7 @@ class PostgresSaver:
                 imp = [(d.id, d.full_name, d.created_at, datetime.now()) for d in data]
                 execute_batch(cursor, cmd, imp, page_size=batch_size)
                 self.pg_conn.commit()
+                self.pg_conn.close()
 
         if table == 'genre':
             with self.pg_conn.cursor() as cursor:
@@ -32,6 +34,7 @@ class PostgresSaver:
                 imp = [(d.id, d.name, d.description, d.created_at, datetime.now()) for d in data]
                 execute_batch(cursor, cmd, imp, page_size=batch_size)
                 self.pg_conn.commit()
+                self.pg_conn.close()
 
         if table == 'genre_film_work':
             with self.pg_conn.cursor() as cursor:
@@ -41,6 +44,7 @@ class PostgresSaver:
                        for d in data]
                 execute_batch(cursor, cmd, imp, page_size=batch_size)
                 self.pg_conn.commit()
+                self.pg_conn.close()
 
         if table == 'person_film_work':
             with self.pg_conn.cursor() as cursor:
@@ -49,3 +53,4 @@ class PostgresSaver:
                 imp = [(d.id, d.person_id, d.film_work_id, d.role, datetime.now()) for d in data]
                 execute_batch(cursor, cmd, imp, page_size=batch_size)
                 self.pg_conn.commit()
+                self.pg_conn.close()

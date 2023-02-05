@@ -15,3 +15,5 @@ class SqlExtractor:
                 row = data_class(**b)
                 rows.append(row)
             yield rows
+
+        curs.close()
