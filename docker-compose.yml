@@ -6,7 +6,7 @@ services:
     restart: always
     image: postgres:15
     volumes:
-      - $HOME/postgresql/data:/var/lib/postgresql/data
+      - $HOME/postgresql/data_two:/var/lib/postgresql/data_two
     ports:
       - "5432:5432"
     env_file: .env

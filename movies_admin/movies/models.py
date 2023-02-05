@@ -20,12 +20,12 @@ class UUIDMixin(models.Model):
 
 
 class Genre(UUIDMixin, TimeStampedMixin):
-    name = models.CharField(_('Жанр'), max_length=100)
-    description = models.TextField(_('Описание'), blank=True, null=True)
+    name = models.CharField(_('Genre'), max_length=100)
+    description = models.TextField(_('Description'), blank=True, null=True)
 
     class Meta:
-        verbose_name = _('Жанр')
-        verbose_name_plural = _('Жанры')
+        verbose_name = _('Genre')
+        verbose_name_plural = _('Genres')
         db_table = "content\".\"genre"
 
     def __str__(self):
@@ -33,11 +33,11 @@ class Genre(UUIDMixin, TimeStampedMixin):
 
 
 class Person(UUIDMixin, TimeStampedMixin):
-    full_name = models.CharField(_('Полное имя'), max_length=255)
+    full_name = models.CharField(_('Full name'), max_length=255)
 
     class Meta:
-        verbose_name = _('Персона')
-        verbose_name_plural = _('Персоны')
+        verbose_name = _('Person')
+        verbose_name_plural = _('Persons')
         db_table = "content\".\"person"
 
     def __str__(self):
@@ -46,25 +46,25 @@ class Person(UUIDMixin, TimeStampedMixin):
 
 class Filmwork(UUIDMixin, TimeStampedMixin):
     class TypeFilmwork(models.TextChoices):
-        MOVIE = 'M', _('Фильм')
-        TV_SHOW = 'T', _('ТВ шоу')
+        MOVIE = 'M', _('Movie')
+        TV_SHOW = 'T', _('TV Show')
 
-    title = models.CharField(_('Название'), max_length=255)
-    description = models.TextField(_('Описание'), blank=True, null=True)
-    creation_date = models.DateField(_('Дата выхода'), blank=True, null=True)
-    certificate = models.TextField(_('Сертификат'), null=True, blank=True)
-    type = models.CharField(_('Тип'), choices=TypeFilmwork.choices, max_length=1)
+    title = models.CharField(_('Movie title'), max_length=255)
+    description = models.TextField(_('Description'), blank=True, null=True)
+    creation_date = models.DateField(_('Release Date'), blank=True, null=True)
+    certificate = models.TextField(_('Certificate'), null=True, blank=True)
+    type = models.CharField(_('Type'), choices=TypeFilmwork.choices, max_length=1)
     genres = models.ManyToManyField('Genre', through='GenreFilmwork')
     persons = models.ManyToManyField('Person', through='PersonFilmwork')
-    rating = models.FloatField(_('Рейтинг'), blank=True, null=True, validators=[
+    rating = models.FloatField(_('Rating'), blank=True, null=True, validators=[
         MinValueValidator(0),
         MaxValueValidator(100)
     ])
-    file_path = models.FileField(_('Файл'), blank=True, null=True, upload_to='movies/')
+    file_path = models.FileField(_('File'), blank=True, null=True, upload_to='movies/')
 
     class Meta:
-        verbose_name = _('Фильм')
-        verbose_name_plural = _('Фильмы')
+        verbose_name = _('Movie')
+        verbose_name_plural = _('Movies')
         db_table = "content\".\"film_work"
 
     def __str__(self):
@@ -77,19 +77,29 @@ class GenreFilmwork(UUIDMixin):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = _('Movie genre')
+        verbose_name_plural = _('Movie genres')
+        indexes = [
+            models.Index(fields=['film_work_id', 'genre_id'], name='film_work_genre'),
+        ]
         db_table = "content\".\"genre_film_work"
 
 
 class PersonFilmwork(UUIDMixin):
     class RoleType(models.TextChoices):
-        ACTOR = 'A', _('Актер')
-        WRITER = 'W', _('Сценарист')
-        DIRECTOR = 'D', _('Директор')
+        ACTOR = 'A', _('Actor')
+        WRITER = 'W', _('Writer')
+        DIRECTOR = 'D', _('Director')
 
     film_work = models.ForeignKey('Filmwork', on_delete=models.CASCADE)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
-    role = models.CharField(_('Роль'), null=True, max_length=1, choices=RoleType.choices)
+    role = models.CharField(_('Role'), null=True, max_length=1, choices=RoleType.choices)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = _('Role of the person')
+        verbose_name_plural = _('Roles of Persons')
+        indexes = [
+            models.Index(fields=['film_work_id', 'person_id', 'role'], name='film_work_person_role'),
+        ]
         db_table = "content\".\"person_film_work"
