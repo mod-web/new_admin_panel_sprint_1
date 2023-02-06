@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, astuple
 import uuid
 import datetime
 
@@ -31,6 +31,7 @@ class Person:
     created_at: datetime.date
     updated_at: datetime.date
     id: uuid.UUID = field(default_factory=uuid.uuid4)
+    columns = ['id', 'full_name', 'created', 'modified']
 
 
 @dataclass

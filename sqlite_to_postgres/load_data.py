@@ -62,11 +62,13 @@ def load_from_sqlite(connection: sqlite3.Connection, pg_conn: _connection):
     for row in tables:
         data_cls, table = row
         for data in sqlite_extractor.get_data(data_cls, table):
-            postgres_saver.save_data(data, table)
+            postgres_saver.save_data(data, data_cls, table)
 
 
 if __name__ == '__main__':
     with conn_context(sqlite) as sqlite_conn, pg_conn_context(dsl) as pg_conn:
         """Запуск основной функции переноса данных"""
         load_from_sqlite(sqlite_conn, pg_conn)
+        sqlite_conn.close()
+        pg_conn.close()
 
